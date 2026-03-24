@@ -16,7 +16,7 @@ from data.validator import validate_shares
 
 @dataclass
 class SidebarState:
-    hist_year: int
+    hist_years: int
     horizon_days: int
     horizon_label: str
     n_sims: int
@@ -68,8 +68,7 @@ def render_sidebar() -> SidebarState:
                 "shares": n_shares,                
             })
 
-        # render portfolio list
-        #Display current portfolio entries with per-row delete buttons.
+        # Display current portfolio entries with per-row delete buttons.
         if not st.session_state.portfolio:
             return
     
@@ -88,12 +87,10 @@ def render_sidebar() -> SidebarState:
 
 
         st.divider()
-        # hist_years = _render_hist_settings()
         # Historical data period slider, returns selected years
         st.subheader("Historical data")
         hist_years = st.slider("Years of history", 1, 10, DEFAULT_HIST_YEARS, key="hist_years")
 
-        # horizon_label, horizon_days, n_sims = _render_mc_settings()
         # Monte Carlo horizon + simulation count controls. Returns (label, days, n_sims).
         st.subheader("Monte Carlo settings")
         horizon_label = st.selectbox(
@@ -114,7 +111,7 @@ def render_sidebar() -> SidebarState:
         run_clicked   = st.button("Run simulation", use_container_width=True, type="primary")
 
     return SidebarState(
-        hist_year = hist_years, 
+        hist_years = hist_years, 
         horizon_days = horizon_days, 
         horizon_label = horizon_label, 
         n_sims = n_sims,

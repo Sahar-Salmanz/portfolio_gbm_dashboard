@@ -17,7 +17,7 @@ def fetch_prices(tickers: list[str], years: int=3) -> pd.DataFrame:
     end = datetime.today()
     start = end - timedelta(days=365 * years)
 
-    raw = yf.download(tickers, start, end, auto_adjust=True, progress=False, threads=True)
+    raw = yf.download(tickers, start=start, end=end, auto_adjust=True, progress=False, threads=True)
 
     # yfinance returns a MultiIndex when multiple tickers are requested
     if isinstance(raw.columns, pd.MultiIndex):
@@ -39,7 +39,7 @@ def fetch_prices(tickers: list[str], years: int=3) -> pd.DataFrame:
     prices = prices.ffill().bfill() # fill minor gaps, individual NaNs are forward-filled.
 
     # Ensure column order matches the requested tickers
-    available = [t for t in tickers if t in prices.column]
+    available = [t for t in tickers if t in prices.columns]
     return prices[available]
 
 
