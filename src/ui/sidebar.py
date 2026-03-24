@@ -48,25 +48,7 @@ def render_sidebar() -> SidebarState:
 
         if st.button("Add to portfolio", use_container_width=True):
             # Validate and append an asset to st.session_state.portfolio.
-            existing_tickers = [e["ticker"] for e in st.session_state.portfolio]
-
-            if selected_ticker in existing_tickers:
-                st.warning(f"{selected_ticker} is already in your portfolio. Remove it first to update shares.")
-                return
-
-            if len(st.session_state.portfolio) >= MAX_ASSETS:
-                st.error(f"Maximum {MAX_ASSETS} assets allowed.")
-                return
-
-            if not validate_shares(n_shares)[0]:
-                st.error(validate_shares(n_shares)[1])
-                return
-
-            st.session_state.portfolio.append({
-                "label":  selected_label.strip(),
-                "ticker": selected_ticker,
-                "shares": n_shares,                
-            })
+            _try_add_asset(selected_label, selected_ticker, int(n_shares))
 
         # Display current portfolio entries with per-row delete buttons.
         if not st.session_state.portfolio:
@@ -117,3 +99,29 @@ def render_sidebar() -> SidebarState:
         n_sims = n_sims,
         run_clicked = run_clicked
     )
+
+
+
+# Private helper
+def _try_add_asset(label: str, ticker: str, n_shares: int) -> None:
+    """Validate and append an asset to st.session_state.portfolio."""
+    existing_tickers = [e["ticker"] for e in st.session_state.portfolio]
+ 
+    if ticker in existing_tickers:
+        st.warning(f"{ticker} is already in your portfolio. Remove it first to update shares.")
+        return
+ 
+    if len(st.session_state.portfolio) >= MAX_ASSETS:
+        st.error(f"Maximum {MAX_ASSETS} assets allowed.")
+        return
+ 
+    valid, msg = validate_shares(n_shares)
+    if not valid:
+        st.error(msg)
+        return
+ 
+    st.session_state.portfolio.append({
+        "label":  label.strip(),
+        "ticker": ticker,
+        "shares": n_shares,
+    })
