@@ -79,6 +79,7 @@ portfolio_gbm_dashboard/
 __Geometric Brownian Motion__
 
 Each asset price follows:
+
 $$S_i(t + \Delta t) = S_i(t) \exp \big[\big(\mu_i - \frac{\sigma_i^2}{2} \big) \Delta t + \sigma_i \sqrt{\Delta t} Z_i \big]$$
 
 where $\mu_i$ and $\sigma_i^2$ are estimated from historical log-returns.
